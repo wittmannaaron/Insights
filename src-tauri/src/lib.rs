@@ -37,6 +37,7 @@ pub fn run() {
                 .build(app)?;
 
             samplers::cpu_ram::spawn(app.handle().clone());
+            samplers::gpu::spawn(app.handle().clone());
 
             Ok(())
         })

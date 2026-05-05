@@ -42,6 +42,18 @@ async function wireEvents() {
     gauges.ram.gauge.set(used_pct);
     gauges.ram.sub.textContent = `${fmtBytes(used_bytes)} / ${fmtBytes(total_bytes)}`;
   });
+
+  await listen("metrics:gpu", (e) => {
+    const { usage_pct } = e.payload;
+    gauges.gpu.gauge.set(usage_pct);
+    gauges.gpu.sub.textContent = `${usage_pct.toFixed(1)}%`;
+  });
+
+  await listen("metrics:vram", (e) => {
+    const { used_bytes, total_bytes, used_pct } = e.payload;
+    gauges.vram.gauge.set(used_pct);
+    gauges.vram.sub.textContent = `${fmtBytes(used_bytes)} / ${fmtBytes(total_bytes)}`;
+  });
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
