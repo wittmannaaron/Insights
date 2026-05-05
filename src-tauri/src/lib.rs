@@ -1,14 +1,21 @@
 mod samplers;
 
+use samplers::processes::{top_processes, TopProcessesResult};
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Manager,
 };
 
+#[tauri::command]
+fn get_top_processes(kind: String, limit: Option<usize>) -> TopProcessesResult {
+    top_processes(&kind, limit.unwrap_or(10))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![get_top_processes])
         .setup(|app| {
             let open_item = MenuItem::with_id(app, "open", "Open Insights", true, None::<&str>)?;
             let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;

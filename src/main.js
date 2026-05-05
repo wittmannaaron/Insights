@@ -1,5 +1,6 @@
 import { createGauge } from "./gauge.js";
 import { createSparkline } from "./sparkline.js";
+import { showProcessModal } from "./modal.js";
 
 const ACCENTS = {
   cpu: "#4ea3ff",
@@ -93,8 +94,24 @@ async function wireEvents() {
   });
 }
 
+function setupClickToDrill() {
+  for (const card of document.querySelectorAll(".view-live .card")) {
+    card.addEventListener("click", () => {
+      showProcessModal(card.dataset.metric);
+    });
+    card.style.cursor = "pointer";
+  }
+  for (const row of document.querySelectorAll(".view-history .history-row")) {
+    row.addEventListener("click", () => {
+      showProcessModal(row.dataset.metric);
+    });
+    row.style.cursor = "pointer";
+  }
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
   mount();
   setupTabs();
+  setupClickToDrill();
   await wireEvents();
 });
