@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Insights Popover</title>
+    <script type="module" src="/popover.js" defer></script>
+  </head>
+  <body class="popover-body">
+    <main class="popover">
+      <div class="popover-grid">
+        <div class="mini" data-metric="cpu"><span class="label">CPU</span><span class="mini-val">—</span></div>
+        <div class="mini" data-metric="gpu"><span class="label">GPU</span><span class="mini-val">—</span></div>
+        <div class="mini" data-metric="ram"><span class="label">RAM</span><span class="mini-val">—</span></div>
+        <div class="mini" data-metric="vram"><span class="label">VRAM</span><span class="mini-val">—</span></div>
+      </div>
+      <div class="popover-tps">
+        <span class="label">Ollama tps</span>
+        <span class="popover-tps-val">—</span>
+      </div>
+      <button class="popover-open">Open full window</button>
+    </main>
+  </body>
+</html>

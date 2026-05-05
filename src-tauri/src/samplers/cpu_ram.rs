@@ -3,6 +3,8 @@ use std::time::Duration;
 use sysinfo::{CpuRefreshKind, MemoryRefreshKind, RefreshKind, System};
 use tauri::{async_runtime, AppHandle, Emitter, Runtime};
 
+use crate::state::AppState;
+
 #[derive(Serialize, Clone)]
 pub struct CpuSample {
     pub usage_pct: f32,
@@ -17,7 +19,7 @@ pub struct RamSample {
     pub ts_ms: u128,
 }
 
-pub fn spawn<R: Runtime>(app: AppHandle<R>) {
+pub fn spawn<R: Runtime>(app: AppHandle<R>, state: AppState) {
     async_runtime::spawn(async move {
         let mut sys = System::new_with_specifics(
             RefreshKind::new()
@@ -61,7 +63,7 @@ pub fn spawn<R: Runtime>(app: AppHandle<R>) {
                 },
             );
 
-            tokio::time::sleep(Duration::from_millis(1000)).await;
+            tokio::time::sleep(state.sample_interval()).await;
         }
     });
 }

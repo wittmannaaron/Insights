@@ -228,6 +228,107 @@ h1 {
   height: 36px;
 }
 
+.popover-body {
+  margin: 0;
+  background: transparent;
+}
+
+.popover {
+  background: rgba(28, 28, 36, 0.94);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  height: calc(100vh - 24px);
+  margin: 12px;
+}
+
+.popover-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.mini {
+  --accent: #4ea3ff;
+  --fill: 0%;
+  position: relative;
+  background: var(--panel-2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mini::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--accent) var(--fill), transparent var(--fill));
+  z-index: -1;
+  transition: background 0.2s ease;
+}
+
+.mini .label {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mini-val {
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.mini.warn .mini-val {
+  color: #ffc857;
+}
+
+.mini.hot .mini-val {
+  color: #ff5d6c;
+}
+
+.popover-tps {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--panel-2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.popover-tps-val {
+  color: #ffd86c;
+  font-variant-numeric: tabular-nums;
+}
+
+.popover-open {
+  background: rgba(255, 255, 255, 0.06);
+  border: 0;
+  color: var(--fg);
+  padding: 8px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.popover-open:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;

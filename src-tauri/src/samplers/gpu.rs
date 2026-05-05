@@ -1,8 +1,9 @@
 use serde::Serialize;
 use std::process::Command;
-use std::time::Duration;
 use sysinfo::{MemoryRefreshKind, RefreshKind, System};
 use tauri::{async_runtime, AppHandle, Emitter, Runtime};
+
+use crate::state::AppState;
 
 #[derive(Serialize, Clone)]
 pub struct GpuSample {
@@ -56,7 +57,7 @@ fn run_ioreg() -> Option<String> {
     String::from_utf8(out.stdout).ok()
 }
 
-pub fn spawn<R: Runtime>(app: AppHandle<R>) {
+pub fn spawn<R: Runtime>(app: AppHandle<R>, state: AppState) {
     async_runtime::spawn(async move {
         let mut sys = System::new_with_specifics(
             RefreshKind::new().with_memory(MemoryRefreshKind::new().with_ram()),
@@ -94,7 +95,7 @@ pub fn spawn<R: Runtime>(app: AppHandle<R>) {
                 },
             );
 
-            tokio::time::sleep(Duration::from_millis(1000)).await;
+            tokio::time::sleep(state.sample_interval()).await;
         }
     });
 }
