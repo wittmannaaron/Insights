@@ -4,10 +4,6 @@
   --panel-2: #2c2c36;
   --fg: #e8e8ee;
   --muted: #8a8a96;
-  --accent-cpu: #4ea3ff;
-  --accent-gpu: #b48cff;
-  --accent-ram: #6ce3a3;
-  --accent-vram: #ffb572;
   font-family: -apple-system, "SF Pro Text", Inter, sans-serif;
   font-size: 14px;
   color: var(--fg);
@@ -53,29 +49,44 @@ h1 {
 .card {
   background: var(--panel);
   border-radius: 12px;
-  padding: 16px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 120px;
+  align-items: center;
+  gap: 6px;
   border: 1px solid var(--panel-2);
 }
 
 .card .label {
+  align-self: flex-start;
   color: var(--muted);
-  font-size: 12px;
-  letter-spacing: 0.05em;
+  font-size: 11px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.card .value {
-  font-size: 32px;
+.gauge-slot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.gauge-text {
+  fill: var(--fg);
+  font-size: 24px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
-footer {
+.card .sub {
   color: var(--muted);
   font-size: 12px;
-  text-align: center;
+  font-variant-numeric: tabular-nums;
 }

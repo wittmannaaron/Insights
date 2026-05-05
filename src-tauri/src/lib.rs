@@ -1,3 +1,5 @@
+mod samplers;
+
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
@@ -33,6 +35,8 @@ pub fn run() {
                     }
                 })
                 .build(app)?;
+
+            samplers::cpu_ram::spawn(app.handle().clone());
 
             Ok(())
         })

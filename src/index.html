@@ -11,15 +11,30 @@
     <main class="container">
       <header>
         <h1>Insights</h1>
-        <span class="status">M1 — skeleton</span>
+        <span class="status">M2 — CPU + RAM live</span>
       </header>
       <section class="grid">
-        <div class="card"><span class="label">CPU</span><span class="value">—</span></div>
-        <div class="card"><span class="label">GPU</span><span class="value">—</span></div>
-        <div class="card"><span class="label">RAM</span><span class="value">—</span></div>
-        <div class="card"><span class="label">VRAM</span><span class="value">—</span></div>
+        <div class="card" data-metric="cpu">
+          <span class="label">CPU</span>
+          <div class="gauge-slot"></div>
+          <span class="sub">—</span>
+        </div>
+        <div class="card" data-metric="gpu">
+          <span class="label">GPU</span>
+          <div class="gauge-slot"></div>
+          <span class="sub">M3</span>
+        </div>
+        <div class="card" data-metric="ram">
+          <span class="label">RAM</span>
+          <div class="gauge-slot"></div>
+          <span class="sub">—</span>
+        </div>
+        <div class="card" data-metric="vram">
+          <span class="label">VRAM</span>
+          <div class="gauge-slot"></div>
+          <span class="sub">M3</span>
+        </div>
       </section>
-      <footer>Live metrics arrive in M2.</footer>
     </main>
   </body>
 </html>
