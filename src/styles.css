@@ -218,6 +218,16 @@ h1 {
   height: 32px;
 }
 
+.ollama-tps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ollama-tps-spark {
+  height: 36px;
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;

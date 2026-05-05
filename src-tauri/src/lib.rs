@@ -1,3 +1,4 @@
+mod proxy;
 mod samplers;
 
 use samplers::processes::{top_processes, TopProcessesResult};
@@ -46,6 +47,7 @@ pub fn run() {
             samplers::cpu_ram::spawn(app.handle().clone());
             samplers::gpu::spawn(app.handle().clone());
             samplers::ollama::spawn(app.handle().clone());
+            proxy::spawn(app.handle().clone());
 
             Ok(())
         })

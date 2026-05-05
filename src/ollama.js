@@ -19,10 +19,17 @@ export function mountOllamaPanel() {
   const modelsEl = panel.querySelector(".ollama-models");
   const activityHead = panel.querySelector(".ollama-activity-stats");
   const sparkSlot = panel.querySelector(".ollama-activity-spark");
+  const tpsHead = panel.querySelector(".ollama-tps-stats");
+  const tpsSparkSlot = panel.querySelector(".ollama-tps-spark");
 
   // 60-bucket sparkline of requests-per-second.
   const spark = createSparkline({ capacity: 60, color: "#7ee0d0", height: 32 });
   sparkSlot.appendChild(spark.el);
+
+  // Inference-completion tps sparkline (one point per /api/generate or /api/chat
+  // completion, last 30 inferences).
+  const tpsSpark = createSparkline({ capacity: 30, color: "#ffd86c", height: 36 });
+  tpsSparkSlot.appendChild(tpsSpark.el);
 
   // Request log: keep last 60 seconds of completed requests.
   const requestLog = []; // { ts_ms, duration_ms, path }
@@ -108,6 +115,19 @@ export function mountOllamaPanel() {
       statusEl.textContent = "offline";
     }
     renderModels(models);
+  });
+
+  listen("metrics:ollama_tps", (e) => {
+    const m = e.payload;
+    if (m.eval_tps != null) {
+      tpsSpark.push(m.eval_tps);
+      const promptInfo =
+        m.prompt_tps != null ? ` · prompt ${m.prompt_tps.toFixed(0)} tps` : "";
+      tpsHead.textContent = `${m.model} · ${m.eval_count} tok · ${m.eval_tps.toFixed(1)} tps${promptInfo}`;
+    } else if (m.eval_count != null) {
+      // OpenAI usage block — no duration, so just show counts.
+      tpsHead.textContent = `${m.model} · ${m.eval_count} tok (no timing)`;
+    }
   });
 
   listen("metrics:ollama_request", (e) => {

@@ -11,7 +11,7 @@
     <main class="container">
       <header>
         <h1>Insights</h1>
-        <span class="status">M6 — Ollama panel</span>
+        <span class="status">M6b — Ollama TPS via reverse proxy (port 11435)</span>
         <nav class="tabs">
           <button class="tab active" data-tab="live">Live</button>
           <button class="tab" data-tab="history">History 5 min</button>
@@ -51,6 +51,13 @@
           <span class="ollama-status">checking…</span>
         </div>
         <ul class="ollama-models"></ul>
+        <div class="ollama-tps">
+          <div class="ollama-activity-head">
+            <span>Inference tokens/sec (last 30)</span>
+            <span class="ollama-tps-stats">—</span>
+          </div>
+          <div class="ollama-tps-spark"></div>
+        </div>
         <div class="ollama-activity">
           <div class="ollama-activity-head">
             <span>Recent requests (60 s)</span>
