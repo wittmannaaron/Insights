@@ -12,8 +12,8 @@ use std::sync::Arc;
 use tauri::{AppHandle, Emitter, Runtime};
 use tokio::net::TcpListener;
 
-const UPSTREAM: &str = "http://127.0.0.1:11434";
-const LISTEN_ADDR: &str = "127.0.0.1:11435";
+const UPSTREAM: &str = "http://127.0.0.1:11435";
+const LISTEN_ADDR: &str = "127.0.0.1:11434";
 
 // Headers that must not be forwarded verbatim.
 const HOP_BY_HOP: &[&str] = &[

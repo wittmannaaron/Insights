@@ -22,6 +22,10 @@ fn get_top_processes(kind: String, limit: Option<usize>) -> TopProcessesResult {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
         .invoke_handler(tauri::generate_handler![get_top_processes])
         .setup(|app| {
             let state = AppState::new();
@@ -86,6 +90,15 @@ pub fn run() {
                         state_for_main.set_focused(*focused);
                     }
                 });
+            }
+
+            // Enable launch-at-login on first start. Idempotent.
+            {
+                use tauri_plugin_autostart::ManagerExt;
+                let mgr = app.autolaunch();
+                if !mgr.is_enabled().unwrap_or(false) {
+                    let _ = mgr.enable();
+                }
             }
 
             samplers::cpu_ram::spawn(app.handle().clone(), state.clone());

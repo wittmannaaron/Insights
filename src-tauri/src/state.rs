@@ -22,9 +22,9 @@ impl AppState {
 
     pub fn sample_interval(&self) -> Duration {
         if self.is_focused() {
-            Duration::from_millis(250)
+            Duration::from_millis(500)
         } else {
-            Duration::from_millis(1000)
+            Duration::from_millis(2000)
         }
     }
 }

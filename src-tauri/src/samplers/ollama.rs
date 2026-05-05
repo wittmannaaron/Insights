@@ -4,7 +4,7 @@ use std::time::Duration;
 use tauri::{async_runtime, AppHandle, Emitter, Runtime};
 use tokio::io::{AsyncBufReadExt, AsyncSeekExt, BufReader, SeekFrom};
 
-const PS_URL: &str = "http://127.0.0.1:11434/api/ps";
+const PS_URL: &str = "http://127.0.0.1:11435/api/ps";
 const POLL_INTERVAL_MS: u64 = 2000;
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
