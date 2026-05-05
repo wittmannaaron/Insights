@@ -144,6 +144,7 @@ async fn forward<R: Runtime>(
     let path_for_parse = parts.uri.path().to_string();
     let app = state.app.clone();
     let mut upstream_stream = upstream_resp.bytes_stream();
+    let req_start = std::time::Instant::now();
 
     let body_stream = async_stream::stream! {
         let mut buf: Vec<u8> = Vec::new();
@@ -153,7 +154,8 @@ async fn forward<R: Runtime>(
                 Ok(chunk) => {
                     if !emitted {
                         buf.extend_from_slice(&chunk);
-                        if let Some(metric) = extract_metric(&buf, &path_for_parse) {
+                        let elapsed_ns = req_start.elapsed().as_nanos() as u64;
+                        if let Some(metric) = extract_metric(&buf, &path_for_parse, elapsed_ns) {
                             let _ = app.emit("metrics:ollama_tps", metric);
                             emitted = true;
                             buf.clear();
@@ -240,12 +242,16 @@ struct OpenAIUsage {
 ///   object with `"done": true` carries `eval_count`, `eval_duration`, etc.
 /// - **OpenAI JSON** (`/v1/chat/completions` non-stream): a single JSON
 ///   document with a `usage` block.
-pub fn extract_metric(buf: &[u8], path: &str) -> Option<OllamaInferenceMetric> {
+pub fn extract_metric(
+    buf: &[u8],
+    path: &str,
+    elapsed_ns: u64,
+) -> Option<OllamaInferenceMetric> {
     if path == "/api/generate" || path == "/api/chat" {
         return extract_ndjson_metric(buf, path);
     }
     if path == "/v1/chat/completions" || path == "/v1/completions" {
-        return extract_openai_metric(buf, path);
+        return extract_openai_metric(buf, path, elapsed_ns);
     }
     None
 }
@@ -299,18 +305,29 @@ fn extract_ndjson_metric(buf: &[u8], path: &str) -> Option<OllamaInferenceMetric
     None
 }
 
-fn extract_openai_metric(buf: &[u8], path: &str) -> Option<OllamaInferenceMetric> {
+fn extract_openai_metric(
+    buf: &[u8],
+    path: &str,
+    elapsed_ns: u64,
+) -> Option<OllamaInferenceMetric> {
     let resp = serde_json::from_slice::<OpenAIChatResponse>(buf).ok()?;
     let usage = resp.usage?;
+    // OpenAI usage block has counts but no duration. Fall back to wall-clock
+    // proxy-side elapsed time. Slightly pessimistic (includes prompt eval +
+    // network) but the only signal we have for /v1/* endpoints.
+    let eval_tps = usage
+        .completion_tokens
+        .filter(|_| elapsed_ns > 0)
+        .map(|c| c as f64 / (elapsed_ns as f64 / 1_000_000_000.0));
     Some(OllamaInferenceMetric {
         model: resp.model.unwrap_or_default(),
         path: path.to_string(),
         prompt_eval_count: usage.prompt_tokens,
         eval_count: usage.completion_tokens,
-        eval_duration_ns: None,
+        eval_duration_ns: Some(elapsed_ns),
         prompt_eval_duration_ns: None,
-        total_duration_ns: None,
-        eval_tps: None,
+        total_duration_ns: Some(elapsed_ns),
+        eval_tps,
         prompt_tps: None,
         ts_ms: now_ms(),
     })
@@ -326,7 +343,7 @@ mod tests {
 {"model":"qwen3:30b","created_at":"2026-05-05T00:00:00Z","response":" world","done":false}
 {"model":"qwen3:30b","created_at":"2026-05-05T00:00:00Z","done":true,"prompt_eval_count":12,"prompt_eval_duration":50000000,"eval_count":47,"eval_duration":1000000000,"total_duration":1080000000}
 "#;
-        let m = extract_metric(body, "/api/chat").expect("metric");
+        let m = extract_metric(body, "/api/chat", 0).expect("metric");
         assert_eq!(m.model, "qwen3:30b");
         assert_eq!(m.eval_count, Some(47));
         assert_eq!(m.prompt_eval_count, Some(12));
@@ -337,24 +354,26 @@ mod tests {
     }
 
     #[test]
-    fn openai_usage_block() {
+    fn openai_usage_block_uses_wallclock() {
         let body = br#"{"id":"chatcmpl-1","object":"chat.completion","model":"qwen3:30b","choices":[{"message":{"role":"assistant","content":"hi"}}],"usage":{"prompt_tokens":12,"completion_tokens":5,"total_tokens":17}}"#;
-        let m = extract_metric(body, "/v1/chat/completions").expect("metric");
+        // 5 tokens in 1 second of wall-clock = 5 tps
+        let m = extract_metric(body, "/v1/chat/completions", 1_000_000_000).expect("metric");
         assert_eq!(m.model, "qwen3:30b");
         assert_eq!(m.eval_count, Some(5));
         assert_eq!(m.prompt_eval_count, Some(12));
-        assert!(m.eval_tps.is_none());
+        assert!((m.eval_tps.unwrap() - 5.0).abs() < 0.001);
+        assert_eq!(m.eval_duration_ns, Some(1_000_000_000));
     }
 
     #[test]
     fn ndjson_without_done_returns_none() {
         let body = br#"{"model":"qwen3","done":false,"response":"x"}
 "#;
-        assert!(extract_metric(body, "/api/chat").is_none());
+        assert!(extract_metric(body, "/api/chat", 0).is_none());
     }
 
     #[test]
     fn unrelated_path_returns_none() {
-        assert!(extract_metric(b"{}", "/api/tags").is_none());
+        assert!(extract_metric(b"{}", "/api/tags", 0).is_none());
     }
 }
