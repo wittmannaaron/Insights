@@ -11,8 +11,8 @@
     "windows": [
       {
         "title": "Insights",
-        "width": 720,
-        "height": 520,
+        "width": 760,
+        "height": 720,
         "visible": true
       }
     ],

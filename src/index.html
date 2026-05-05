@@ -11,7 +11,7 @@
     <main class="container">
       <header>
         <h1>Insights</h1>
-        <span class="status">M5 — process drilldown</span>
+        <span class="status">M6 — Ollama panel</span>
         <nav class="tabs">
           <button class="tab active" data-tab="live">Live</button>
           <button class="tab" data-tab="history">History 5 min</button>
@@ -42,6 +42,21 @@
           <div class="gauge-slot"></div>
           <div class="spark-slot"></div>
           <span class="sub">—</span>
+        </div>
+      </section>
+
+      <section class="ollama-panel" data-reachable="unknown">
+        <div class="ollama-head">
+          <span class="label">Ollama</span>
+          <span class="ollama-status">checking…</span>
+        </div>
+        <ul class="ollama-models"></ul>
+        <div class="ollama-activity">
+          <div class="ollama-activity-head">
+            <span>Recent requests (60 s)</span>
+            <span class="ollama-activity-stats">—</span>
+          </div>
+          <div class="ollama-activity-spark"></div>
         </div>
       </section>
 

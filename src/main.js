@@ -1,6 +1,7 @@
 import { createGauge } from "./gauge.js";
 import { createSparkline } from "./sparkline.js";
 import { showProcessModal } from "./modal.js";
+import { mountOllamaPanel } from "./ollama.js";
 
 const ACCENTS = {
   cpu: "#4ea3ff",
@@ -113,5 +114,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   mount();
   setupTabs();
   setupClickToDrill();
+  mountOllamaPanel();
   await wireEvents();
 });

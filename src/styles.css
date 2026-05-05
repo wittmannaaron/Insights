@@ -133,6 +133,91 @@ h1 {
   height: 56px;
 }
 
+.ollama-panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ollama-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.ollama-status {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ollama-panel[data-reachable="no"] .ollama-status {
+  color: #ff5d6c;
+}
+
+.ollama-models {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 110px;
+  overflow: auto;
+}
+
+.ollama-empty {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+.ollama-model {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  padding: 6px 8px;
+  background: var(--panel-2);
+  border-radius: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.model-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.model-vram {
+  color: var(--fg);
+}
+
+.model-expires {
+  color: var(--muted);
+}
+
+.ollama-activity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ollama-activity-head {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.ollama-activity-spark {
+  height: 32px;
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
