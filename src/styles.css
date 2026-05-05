@@ -24,8 +24,32 @@ body { margin: 0; }
 
 header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
+}
+
+.tabs {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.tab {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--panel-2);
+  color: var(--fg);
 }
 
 h1 {
@@ -70,6 +94,43 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.spark-slot {
+  width: 100%;
+  height: 28px;
+}
+
+.sparkline {
+  display: block;
+}
+
+.view-history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  overflow: auto;
+}
+
+.history-row {
+  background: var(--panel);
+  border: 1px solid var(--panel-2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.history-spark {
+  height: 56px;
 }
 
 .gauge {

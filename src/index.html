@@ -11,28 +11,56 @@
     <main class="container">
       <header>
         <h1>Insights</h1>
-        <span class="status">M3 — CPU + GPU + RAM + VRAM live</span>
+        <span class="status">M4 — sparklines + 5 min history</span>
+        <nav class="tabs">
+          <button class="tab active" data-tab="live">Live</button>
+          <button class="tab" data-tab="history">History 5 min</button>
+        </nav>
       </header>
-      <section class="grid">
+
+      <section class="view view-live grid">
         <div class="card" data-metric="cpu">
           <span class="label">CPU</span>
           <div class="gauge-slot"></div>
+          <div class="spark-slot"></div>
           <span class="sub">—</span>
         </div>
         <div class="card" data-metric="gpu">
           <span class="label">GPU</span>
           <div class="gauge-slot"></div>
+          <div class="spark-slot"></div>
           <span class="sub">—</span>
         </div>
         <div class="card" data-metric="ram">
           <span class="label">RAM</span>
           <div class="gauge-slot"></div>
+          <div class="spark-slot"></div>
           <span class="sub">—</span>
         </div>
         <div class="card" data-metric="vram">
           <span class="label">VRAM</span>
           <div class="gauge-slot"></div>
+          <div class="spark-slot"></div>
           <span class="sub">—</span>
+        </div>
+      </section>
+
+      <section class="view view-history" hidden>
+        <div class="history-row" data-metric="cpu">
+          <div class="history-head"><span class="label">CPU</span><span class="sub">—</span></div>
+          <div class="history-spark"></div>
+        </div>
+        <div class="history-row" data-metric="gpu">
+          <div class="history-head"><span class="label">GPU</span><span class="sub">—</span></div>
+          <div class="history-spark"></div>
+        </div>
+        <div class="history-row" data-metric="ram">
+          <div class="history-head"><span class="label">RAM</span><span class="sub">—</span></div>
+          <div class="history-spark"></div>
+        </div>
+        <div class="history-row" data-metric="vram">
+          <div class="history-head"><span class="label">VRAM</span><span class="sub">—</span></div>
+          <div class="history-spark"></div>
         </div>
       </section>
     </main>
