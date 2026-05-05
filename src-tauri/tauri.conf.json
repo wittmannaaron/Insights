@@ -22,13 +22,19 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["app", "dmg"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "category": "DeveloperTool",
+    "shortDescription": "Live macOS system + Ollama telemetry",
+    "longDescription": "A small Tauri app showing live CPU, GPU, RAM, VRAM usage and Ollama inference tokens/sec via a transparent reverse proxy.",
+    "macOS": {
+      "minimumSystemVersion": "13.0"
+    }
   }
 }

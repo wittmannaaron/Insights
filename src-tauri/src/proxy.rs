@@ -154,10 +154,6 @@ async fn forward<R: Runtime>(
                     if !emitted {
                         buf.extend_from_slice(&chunk);
                         if let Some(metric) = extract_metric(&buf, &path_for_parse) {
-                            eprintln!(
-                                "[insights/proxy] {} model={} eval={:?} eval_tps={:?}",
-                                path_for_parse, metric.model, metric.eval_count, metric.eval_tps
-                            );
                             let _ = app.emit("metrics:ollama_tps", metric);
                             emitted = true;
                             buf.clear();

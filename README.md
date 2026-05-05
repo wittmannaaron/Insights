@@ -8,7 +8,7 @@ See [`docs/plans/2026-05-05-insights-design.md`](docs/plans/2026-05-05-insights-
 
 ## Status
 
-M1–M6b complete. Live CPU/GPU/RAM/VRAM gauges, sparklines, history view, process drilldown, Ollama panel with reverse-proxy-derived tokens/sec.
+v0.1 complete (M1–M8). Live CPU/GPU/RAM/VRAM gauges with 60 s sparklines and 5 min history view, click-to-drill process modal, Ollama panel with reverse-proxy-derived tokens/sec, tray popover with mini-gauges, adaptive sampling (250 ms focused / 1000 ms idle).
 
 ## Ollama tokens/sec
 
@@ -34,3 +34,11 @@ npm run tauri dev
 ```bash
 npm run tauri build
 ```
+
+Outputs `src-tauri/target/release/bundle/macos/Insights.app` and a DMG installer at `src-tauri/target/release/bundle/dmg/Insights_<version>_aarch64.dmg`.
+
+## Limitations
+
+- **Per-process GPU usage** requires `powermetrics` (sudo). The drilldown modal shows a notice instead. By design — see the design doc.
+- **Watt readings** also require `powermetrics`. Excluded for the same reason.
+- **Ollama tokens/sec** only appears when clients are pointed at the proxy on `127.0.0.1:11435`. Unproxied requests still show as load in the request-rate sparkline but contribute no TPS data.
